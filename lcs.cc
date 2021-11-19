@@ -3,26 +3,22 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "cell.h"
 
 using namespace std;
 
 ifstream fd;
-bool DEBUG = true;
+bool DEBUG = false;
 int k;
 int mFound = 0;
 const int MAX = 999;
 vector <char> a;
 vector <char> b;
 vector <char> matches;
-cell cells[MAX][MAX];
 
 
 void load(char * filename);
 void debugPrint();
 void readStrings();
-void tablePrint();
-void createTable();
 void weird();
 void insertionSort(char arr[], int n, int m);
 void printChar(char arr[], int n, int m);
@@ -39,11 +35,14 @@ int main (int argc,char *argv[]){
     {
         debugPrint();
         //tablePrint();
+        cout<<"Matches Found: ";
     }
+    
+    cout<<mFound<<endl;
+    printChar(matches, matches.size(), 0);
 }
 
 bool checkMatch(char arr1[], int a, int b, char arr2[], int n){
-    bool match = false;
     // cout<<endl<<"---------------------------------"<<endl; 
     // printChar(arr1, n, m);
     // cout<< endl;
@@ -55,17 +54,20 @@ bool checkMatch(char arr1[], int a, int b, char arr2[], int n){
         //cout<<arr1[a];
         if (arr1[a] == arr2[n])
         {
+
             a++;
             n++;
-            match = true;
         }
         else{
             return false;
         }
 
         
+        
     } while (a < b);
     //cout<<endl;
+    
+    
     mFound++;
     return true;
     
@@ -74,9 +76,8 @@ bool checkMatch(char arr1[], int a, int b, char arr2[], int n){
 void weird(){
     char aSort[MAX];
     char bSort[MAX];
-    bool flag = false;
-    int aIndex = 0;
-    int bIndex = 0;
+    size_t aIndex = 0;
+    size_t bIndex = 0;
     for (size_t i = 0; i < a.size() - 1; i ++)
     {
         aSort[i] = a[i];
@@ -98,39 +99,50 @@ void weird(){
         {
             for (size_t i = 0; i < a.size() - 1; i += k)
             {
-                printChar(aSort, aIndex + k, aIndex);
-                printChar(bSort, bIndex + k, bIndex);
+                if (DEBUG){
+                    printChar(aSort, aIndex + k, aIndex);
+                    printChar(bSort, bIndex + k, bIndex);
+                }
                 if ((aIndex > a.size() - 2) || (bIndex > b.size() - 1))
                 {
-                    cout<<"too Far!"<<endl;
+                    if (DEBUG){
+                        cout<<"too Far!"<<endl;
+                    }
                     break;
                 }
                 else if (!(checkMatch(aSort, aIndex, aIndex + k, bSort, bIndex)))
-                {
-                    // cout<<endl;
-                    // cout<<"b";
-                    // cout<<endl;
-                    // cout<<bIndex<<" "<<bIndex + k<<endl;
-                    // cout<<endl;
-                    // cout<<"a";
-                    // cout<<endl;
-                    // cout<<aIndex<<" "<<aIndex + k<<endl;
-                    // cout<<endl;
-                    cout<<"Not Found ;/";
-                    cout<<endl;
+                {   
+                    if (DEBUG){
+                        cout<<"a";
+                        cout<<aIndex<<" "<<aIndex + k<<endl;
+                        cout<<endl;
+                        cout<<"b";
+                        cout<<bIndex<<" "<<bIndex + k<<endl;
+                        cout<<endl;
+                        cout<<"Not Found ;/";
+                        cout<<endl;
+                    }
                     aIndex += k; 
                         
                 }
                 else 
                 {
-                    cout<<endl;
-                    cout<<"Found ;)";
-                    cout<<endl;
+                    if (DEBUG){
+                        cout<<endl;
+                        cout<<"Found ;)";
+                        cout<<endl;
+                    }
+                    for (size_t i = aIndex; i < aIndex + k; i++)
+                    {
+                        matches.push_back(a[i]);
+                    }
                     aIndex += k;
                     //bIndex += k;
                     break;
                 }
-                cout<<endl;
+                if (DEBUG){
+                    cout<<endl;
+                }
             }
             bIndex += k;
             aIndex = bIndex;
@@ -207,9 +219,6 @@ void debugPrint(){
     printChar(b, b.size() - 1, 0);
 
     cout<<"Size: "<<b.size() - 1<<endl;
-
-    cout<<"Matches Found: "<<mFound<<endl;
-
 }
 
 void readStrings(){

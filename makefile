@@ -1,17 +1,18 @@
 CFLAGS = -g -Wall -Werror -O3
 CC = g++
 
-PROGRAM = lcs
+PROGRAM = lcs.out
 CFILES = lcs.cc
 
 ${PROGRAM} :
-	${CC} ${CFLAGS} ${PROGRAM}
+	${CC} ${CFLAGS} lcs.cc 
 
 test:
-	./a.exe input.small
-	./a.exe input.txt
-	./a.exe input1.txt
-	./a.exe input2.txt
+	./a.out input.small
+	./a.out input1.small
+	./a.out input.txt
+	./a.out input1.txt
+	./a.out input2.txt
 
 clean:
 	/bin/rm -f *.o ${PROGRAM} 
