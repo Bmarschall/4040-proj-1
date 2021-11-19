@@ -27,7 +27,7 @@ void weird();
 void insertionSort(char arr[], int n, int m);
 void printChar(char arr[], int n, int m);
 void printChar(vector <char> arr, int n, int m);
-void checkMatch(char arr1[], char arr2[], int n, int m);
+bool checkMatch(char arr1[], char arr2[], int n, int m);
 
 int main (int argc,char *argv[]){ 
 
@@ -42,56 +42,103 @@ int main (int argc,char *argv[]){
     }
 }
 
-void checkMatch(char arr1[], char arr2[], int n, int m){
-    bool match = false; 
-    printChar(arr1, n, m);
-    printChar(arr2, n, m);
-
-    for (int i = m ; i < n; i++)
-    {
-        
-        if (arr1[i] == arr2[i])
-        {
-            match = true;
-        }
-        else
-        {
-            return;
-        }
-
-    }
-
+bool checkMatch(char arr1[], int a, int b, char arr2[], int n){
+    bool match = false;
+    // cout<<endl<<"---------------------------------"<<endl; 
+    // printChar(arr1, n, m);
+    // cout<< endl;
+    // printChar(arr2, n, m);
     
 
-    if (match)
+    do
     {
-        //cout<<"match"<<endl;
-        //printChar(arr1, n, m);
-        mFound++;
-    }
+        //cout<<arr1[a];
+        if (arr1[a] == arr2[n])
+        {
+            a++;
+            n++;
+            match = true;
+        }
+        else{
+            return false;
+        }
+
+        
+    } while (a < b);
+    //cout<<endl;
+    mFound++;
+    return true;
     
 }
 
 void weird(){
     char aSort[MAX];
     char bSort[MAX];
-    
-    int index = 0;
+    bool flag = false;
+    int aIndex = 0;
+    int bIndex = 0;
     for (size_t i = 0; i < a.size() - 1; i ++)
     {
         aSort[i] = a[i];
+    }
+    for (size_t i = 0; i < b.size(); i++)
+    {
         bSort[i] = b[i];
     }
-
-    for (size_t i = 0; i < a.size() - 1; i += k)
-    {
-        insertionSort (aSort, i + k, i); 
-        insertionSort (bSort, i + k, i);
-        checkMatch    (aSort, bSort, i + k, i);
-        cout<<endl;
-    }
     
+    for (size_t i = 0; i < a.size() - 1; i += k)
+        {insertionSort (aSort, i + k, i);}
+    for (size_t i = 0; i < b.size() - 1; i += k)
+        {insertionSort (bSort, i + k, i);}
+
+    // if (a.size() >= b.size())
+    // {
+
+        for (size_t j = 0; j < b.size() - 1; j += k)
+        {
+            for (size_t i = 0; i < a.size() - 1; i += k)
+            {
+                printChar(aSort, aIndex + k, aIndex);
+                printChar(bSort, bIndex + k, bIndex);
+                if ((aIndex > a.size() - 2) || (bIndex > b.size() - 1))
+                {
+                    cout<<"too Far!"<<endl;
+                    break;
+                }
+                else if (!(checkMatch(aSort, aIndex, aIndex + k, bSort, bIndex)))
+                {
+                    // cout<<endl;
+                    // cout<<"b";
+                    // cout<<endl;
+                    // cout<<bIndex<<" "<<bIndex + k<<endl;
+                    // cout<<endl;
+                    // cout<<"a";
+                    // cout<<endl;
+                    // cout<<aIndex<<" "<<aIndex + k<<endl;
+                    // cout<<endl;
+                    cout<<"Not Found ;/";
+                    cout<<endl;
+                    aIndex += k; 
+                        
+                }
+                else 
+                {
+                    cout<<endl;
+                    cout<<"Found ;)";
+                    cout<<endl;
+                    aIndex += k;
+                    //bIndex += k;
+                    break;
+                }
+                cout<<endl;
+            }
+            bIndex += k;
+            aIndex = bIndex;
+        }
+    // }
+
     if (DEBUG){
+        cout<<"\nsorted strings: \n";
         printChar(aSort, a.size() - 1, 0);
         printChar(bSort, b.size() - 1, 0);
                 
